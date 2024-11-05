@@ -1,4 +1,4 @@
-import React , { useState } from "react";
+import React , { useState, useMemo } from "react";
 import styled from "styled-components";
 import Button from "./Button";
 
@@ -19,13 +19,15 @@ let idx=0;
 const Length = () => {
     
     const [text,setText] = useState(list[0])
-    const[length,setlength] = useState(list[0].length);
+    //const[length,setlength] = useState(list[0].length);
    
     const _onPress = () => {
-        setlength(getLength(text));
         ++idx;
         if(idx< list.length) setText(list[idx])
     }
+
+    //text의 값이 바뀔때만 함수가 실행된다.
+    const length = useMemo(()=>getLength(text),[text])
     return (
         <>
             <StyledText>Text : {text}</StyledText>
