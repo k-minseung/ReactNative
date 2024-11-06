@@ -7,6 +7,8 @@ import Timer from "./components/Timer";
 import Length from "./components/Length";
 import Dog from "./components/Dog";
 import MakeBread from "./components/MakeBread";
+import ScrollComponent from "./components/ScrollComponents";
+
 
 const Container = styled.View`
     flex:1;
@@ -27,8 +29,9 @@ const App = () => {
 
             {/* <Timer /> */}
             {/* <Length /> */}
-            <Dog />
+            {/* <Dog /> */}
             {/* <MakeBread /> */}
+            <ScrollComponent />
         </Container>
 
 )}
