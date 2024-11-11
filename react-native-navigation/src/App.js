@@ -6,6 +6,8 @@ import UserStack from "./navigations/UserStack";
 import TabNavigator from "./navigations/Tab";
 import CartTabNavigator from "./navigations/CartTab";
 import ChatTabNavigator from "./navigations/ChatTab";
+import DrawerNavigator from "./navigations/Drawer";
+
 
 // const Container = styled.View`
 //     flex : 1;
@@ -17,7 +19,7 @@ import ChatTabNavigator from "./navigations/ChatTab";
 const App = () => {
     return(
         <NavigationContainer>
-            <ChatTabNavigator />
+            <DrawerNavigator />
         </NavigationContainer>
     )
 }
