@@ -6,6 +6,11 @@ import { useState, useEffect } from "react";
 import { Asset } from 'expo-asset'; // 이미지 오디오 동영상 등 다양한 리소스를 관리하고 미리 로드하 수 있도록 도와준다.
 import * as Font from 'expo-font'; // 사용자 정의 글꼴을 미리 로드하고 사용할 수 있다.
 import * as SplashScreen from 'expo-splash-screen'; // 스플래시 화면이 자동으로 숨겨지지 않도록 설정하여 초기화 작업이 완료될 때까지 유지
+import Navigation from "./navigations/index";
+import { images } from "./utils/images";
+
+
+
 SplashScreen.preventAutoHideAsync();
 
 const cacheImages = images => {
@@ -22,7 +27,6 @@ const cacheFonts = fonts => {
     // 폰트 캐싱 함수 : 폰트 배열을 받아 각 폰트를 로드
     return fonts.map(font=> font.loadAsync(font))
 }
-
 
 
 const App = () => {
@@ -44,9 +48,9 @@ const App = () => {
     },[])
 
     const _loadAssets = async() => {
-        const imageAssets = cacheImages([require('../assets/splash.png')]) //로컬 스플래시 이미지 캐싱
+        const imageAssets = cacheImages([require('../assets/splash.png'), ...Object.values(images)]) //로컬 스플래시 이미지 캐싱
         const fontAssets = cacheFonts([]) // 추가적인 폰트가 있다면 배열에 추가
-
+    
         await Promise.all([...imageAssets, ...fontAssets]);
     }
 
@@ -57,6 +61,7 @@ const App = () => {
     return(
         <ThemeProvider theme={theme}>
             <StatusBar barStyle='dark-content'/>
+            <Navigation />
         </ThemeProvider>
     )
 }
