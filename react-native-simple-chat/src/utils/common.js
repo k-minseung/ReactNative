@@ -1,5 +1,5 @@
+//정규식
 //올바른 이메일 형식인지 확인하는 함수
-정규식
 export const validateEmail = email =>{
     const regex = /^[0-9?A-z0-9?]+(\.)?[0-9?A-z0-9?]+@[0-9A-z]+\.[A-z]{2}.?[A-z]{0,3}$/;
     /*
