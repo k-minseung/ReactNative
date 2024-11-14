@@ -1,4 +1,4 @@
-import React,{useState, useRef, useEffect} from "react";
+import React,{useState, useRef, useEffect, useContext} from "react";
 import styled from "styled-components";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Image, Input, Button } from "../components";
@@ -6,6 +6,10 @@ import { images } from "../utils/images";
 import {validatePassword, removeWhitespace} from '../utils/common'
 import { validateEmail } from "../utils/common";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Alert } from "react-native";
+import { login } from "../utils/Firebase";
+import { ProgressContext} from "../contexts/Progress";
+import { UserContext } from "../contexts";
 
 const Container = styled.View`
     flex : 1;
@@ -29,6 +33,9 @@ const ErrorText = styled.Text`
 
 
 const Login = ({navigation}) => {
+
+    const {spinner} = useContext(ProgressContext);
+    const {dispatch} = useContext(UserContext);
     //useSafeAreaInsets();
     //화면의 안전 영역을 고려해 레이아웃을 조정할 때 사용하는 Hook
     //ios장치의 상단 노치나 하단 홈 버튼 영역과 같은 안전 구역을 감안해 레이아웃을 멎추기 위해 사용된다.
@@ -67,8 +74,17 @@ const Login = ({navigation}) => {
     }
 
     //버튼 컴포넌트에 전달할 함수 
-    const _handleLoginButtononPress= () => {
-        alert('버튼눌림')
+    const _handleLoginButtononPress= async() => {
+        try {
+            spinner.start();
+            const user = await login({email,password});
+            dispatch(user);
+            Alert.alert('Login Success',user.email);
+        } catch (error) {
+            Alert.alert('Login Error',error.message);
+        } finally{
+            spinner.stop();
+        }
     }
 
     return(
@@ -78,7 +94,7 @@ const Login = ({navigation}) => {
             
         >
             <Container insets= {insets}>
-                <Image url={images.logo} ImageStyle={{borderRadius : 80}}/>
+                <Image url={images.logo} ImageStyle={{borderRadius : 80}} rounded/>
                 <Input 
                     label="Email"
                     value={email}

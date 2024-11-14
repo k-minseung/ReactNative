@@ -14,9 +14,9 @@ const Container = styled.View`
 //props를 통해 전달되는 값에 따라 이미지가 원형으로 렌더링되도록 수정
 const StyledImage = styled.Image`
     background-color:${({theme})=> theme.imageBackground};
-    width: 100px;
-    height: 100px;
-    border-radius: ${({rounded}) =>(rounded ? 50 : 0)}px;
+    width: 120px;
+    height: 120px;
+    border-radius: ${({rounded}) =>(rounded ? 70 : 0)}px;
 `
 
 const ButtonContainer = styled.TouchableOpacity`

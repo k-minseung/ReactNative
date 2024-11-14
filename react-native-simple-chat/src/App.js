@@ -8,7 +8,7 @@ import * as Font from 'expo-font'; // 사용자 정의 글꼴을 미리 로드�
 import * as SplashScreen from 'expo-splash-screen'; // 스플래시 화면이 자동으로 숨겨지지 않도록 설정하여 초기화 작업이 완료될 때까지 유지
 import Navigation from "./navigations/index";
 import { images } from "./utils/images";
-
+import { ProgressProvider,UserProvider } from "./contexts";
 
 
 SplashScreen.preventAutoHideAsync();
@@ -60,8 +60,12 @@ const App = () => {
 
     return(
         <ThemeProvider theme={theme}>
-            <StatusBar barStyle='dark-content'/>
-            <Navigation />
+            <UserProvider>
+                <ProgressProvider>
+                    <StatusBar barStyle='dark-content'/>
+                    <Navigation />
+                </ProgressProvider>
+            </UserProvider>
         </ThemeProvider>
     )
 }

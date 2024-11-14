@@ -1,9 +1,12 @@
-import React,{useState,useEffect,useRef} from "react";
+import React,{useState,useEffect,useRef,useContext} from "react";
+import { ProgressContext, UserContext } from "../contexts";
 import styled from "styled-components";
 import { Image, Input, Button } from "../components";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { validateEmail, removeWhitespace } from "../utils/common";
 import { images } from "../utils/images";
+import { Alert } from "react-native";
+import { signup } from "../utils/Firebase";
 
 const Container = styled.View`
     flex : 1;
@@ -23,6 +26,10 @@ const ErrorText = styled.Text`
 
 
 const Signup = () => {
+
+    const {spinner} = useContext(ProgressContext);
+    const {dispatch} = useContext(UserContext);
+
     const[name,setName]=useState(''); // 이름 관리 state
     const[email,setEamil]=useState(''); // 이메일 관리 state
     const[password,setPassword]=useState(''); // 비밀번호 관리 state
@@ -63,8 +70,19 @@ const Signup = () => {
         )
     },[name,email,password,passwordConfirm,errorMessage])
 
-    const _handleSignupButtononPress = () => {
-
+    //회원가입 기능
+    const _handleSignupButtononPress = async () => {
+        try {
+            spinner.start();
+            const user = await signup({email,password,name, photoUrl})
+            console.log(user)
+            dispatch(user)
+            Alert.alert('Signup Success',user.email)
+        } catch (error) {
+            Alert.alert('Signup Error',error.message)
+        } finally{
+            spinner.stop();
+        }
     }
 
     
