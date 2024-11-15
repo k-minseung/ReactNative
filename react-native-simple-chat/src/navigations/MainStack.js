@@ -18,7 +18,7 @@ const MainStack = () => {
                 headerBackTitleVisible : false,
 
             }}>
-            <Stack.Screen name="Main" component={MainTab} />  
+            <Stack.Screen name="Main" component={MainTab} options={{headerShown:false}}/>  
             <Stack.Screen name="ChannelCreation" component={ChannelCreation} />
             <Stack.Screen name="Channel" component={Channel} />
         </Stack.Navigator>

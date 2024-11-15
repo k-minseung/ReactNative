@@ -8,7 +8,7 @@ import { getAuth,
 import config from '../../firebase.json'
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { uploadBytes } from 'firebase/storage';
-
+import { collection, getFirestore, doc, setDoc } from 'firebase/firestore';
 
 
 //initializeApp()메서드
@@ -68,7 +68,59 @@ export const signup = async({name,email,password,photoUrl})=>{
     return user;
 }
 
+
+// 로그아웃 함수
 export const logout = async () => {
     await signOut(auth);
     return{};
+}
+
+
+//현재 로그인한 유저의 정보를 불러오는 함수
+export const getCurrentUser = () => {
+    const{uid,displayName,email,photoURL} = auth.currentUser;
+    return {uid,displayName,email,photoURL};
+}
+
+//다른 사진을 업로드할 수 있게 수정해주는 함수
+//auth.currentUser => 현재 로그인한 User의 정보
+export const updateUserInfo = async photo =>{
+    const photoUrl = await uploadImage(photo);
+    await updateProfile(auth.currentUser,{photoUrl})
+    return photoUrl;
+}
+
+const db = getFirestore(app);
+//새로운 채널을 생성하는 함수
+export const createChannel = async ({title,description}) => {
+
+    //Firestore에서 'channels' 컬렉션을 참조
+    //collection(db,'channels');
+    //데이터베이스 객체 db와 컬렉션 이름으로 사용할 channels를 입력받아 특정 컬렉션을 가리킨다.
+    const ChannelCollection = collection(db,'channels');
+
+    //새 문서 참조 생성(랜덤 아이디가 자동으로 할당됨)
+    //doc(ChannelCollection)
+    //컬렉션에서 새로운 문서를 위한 참조를 생성
+    //이렇게 생성된 참조는 아직 데이터베이스에 저장되지 않은 상태이다.
+    const newChannelRef=doc(ChannelCollection)
+
+    //그 새 문서의 아이디를 긁어온다
+    const id = newChannelRef.id;
+
+    //새 채널 데이터를 객체로 구성함
+    const newChannel = {
+        id,                 //새로 생성된 문서의 공유아이디
+        title,              //채널제목
+        description,        //채널설명
+        createAt:Date.now(),//생성시간(현재타임스탬프)
+    };
+
+    //Firestore 새 문서를 생성하고 데이터 저장
+    //setDoc(newChannelRef, newChannel)
+    //newChannelRef가 가리키는 경로에 newChannel 객체를 저장
+    await setDoc(newChannelRef, newChannel)
+
+    //생성된 문서의 id 반환
+    return id;
 }

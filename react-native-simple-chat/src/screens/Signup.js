@@ -7,6 +7,7 @@ import { validateEmail, removeWhitespace } from "../utils/common";
 import { images } from "../utils/images";
 import { Alert } from "react-native";
 import { signup } from "../utils/Firebase";
+import { logout } from "../utils/Firebase";
 
 const Container = styled.View`
     flex : 1;

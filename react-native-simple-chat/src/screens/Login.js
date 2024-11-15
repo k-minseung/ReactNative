@@ -46,10 +46,11 @@ const Login = ({navigation}) => {
     const[email,setEmail]=useState('');
     const[password,setPassword]=useState('');
     const[errorMessage,setErrorMessage]=useState(''); 
+    const [disabled,setDisabled]=useState(true);
 
     const passwordRef= useRef();
     
-    const [disabled,setDisabled]=useState(true);
+    
 
     useEffect(()=>{
         //이메일을 입력하고 비밀번호를 입력하고
