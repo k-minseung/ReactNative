@@ -90,37 +90,46 @@ export const updateUserInfo = async photo =>{
     return photoUrl;
 }
 
-const db = getFirestore(app);
-//새로운 채널을 생성하는 함수
-export const createChannel = async ({title,description}) => {
+export const db = getFirestore(app);
 
-    //Firestore에서 'channels' 컬렉션을 참조
-    //collection(db,'channels');
-    //데이터베이스 객체 db와 컬렉션 이름으로 사용할 channels를 입력받아 특정 컬렉션을 가리킨다.
-    const ChannelCollection = collection(db,'channels');
+//채널을 생성하는 함수
+//매개변수로 제목과 설명을 얻어온다.
+export const createChannel = async ({ title, description }) => {
 
-    //새 문서 참조 생성(랜덤 아이디가 자동으로 할당됨)
-    //doc(ChannelCollection)
-    //컬렉션에서 새로운 문서를 위한 참조를 생성
-    //이렇게 생성된 참조는 아직 데이터베이스에 저장되지 않은 상태이다.
-    const newChannelRef=doc(ChannelCollection)
-
-    //그 새 문서의 아이디를 긁어온다
+    //fireStore 데이터베이스에서 'channels'컬렉션에 접근
+    //db : firestore의 객체를 가리킨다.
+    //channels이라는 컬렉션에 접근
+    const channelCollection = collection(db, 'channels');
+    
+    //channels 컬렉션에 새로운 문서를 추가하기 위한 레퍼런스를 생성
+    const newChannelRef = doc(channelCollection);
     const id = newChannelRef.id;
 
-    //새 채널 데이터를 객체로 구성함
+    //id : fireStore에서 자동 생성된 ID
+    //title : 넘어온 채널의 제목
+    //description : 채널의 설명
+    //createdAt : 현재 시간의 타임스탬프
     const newChannel = {
-        id,                 //새로 생성된 문서의 공유아이디
-        title,              //채널제목
-        description,        //채널설명
-        createAt:Date.now(),//생성시간(현재타임스탬프)
+        id,
+        title,
+        description,
+        createdAt: Date.now(),
     };
+    //새로 생성된 문서에 newChannel데이터를 fireStore에 저장
+    await setDoc(newChannelRef, newChannel);
 
-    //Firestore 새 문서를 생성하고 데이터 저장
-    //setDoc(newChannelRef, newChannel)
-    //newChannelRef가 가리키는 경로에 newChannel 객체를 저장
-    await setDoc(newChannelRef, newChannel)
-
-    //생성된 문서의 id 반환
+    //새로 생성된 채널의 ID를 반환
     return id;
+};
+
+
+export const createMessage  = async ({channelId,text}) => {
+    //특정 채널의 메시지 컬렉션 안에 새로운 메시지 문서의 레퍼런스를 생성
+
+    const docRef = doc(db, `channels/${channelId}/message`,text)
+
+    //생성된 문서 레퍼런스에 메세지 데이터를 저장
+    //기존 메세지 객체의 모든 속성을 복사하고
+    //cratedAt필드를 현재 시간으로 추가
+    await setDoc(docRef,{...text, createdAt: Date.now() })
 }

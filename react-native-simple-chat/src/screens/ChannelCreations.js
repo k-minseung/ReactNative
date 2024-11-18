@@ -35,7 +35,7 @@ const ChannelCreation = ({navigation}) => {
     const [disabled,setDisabled]=useState(true);        // 버튼 활성화 상태 관리 state
     const descriptionRef = useRef();                    // 포커스 관리 state
 
-    //title,description,errorMessage 가 변경될 때마다 실행이 된다.
+    //title,description,errorMessage 가 변경될 때마다 실행이 된다.  
     useEffect(()=>{
         setDisabled(!(title&&description&&!errorMessage));
     },[title,description,errorMessage])
