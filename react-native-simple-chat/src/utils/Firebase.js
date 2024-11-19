@@ -11,6 +11,7 @@ import { uploadBytes } from 'firebase/storage';
 import { collection, getFirestore, doc, setDoc } from 'firebase/firestore';
 
 
+
 //initializeApp()메서드
 //firebase는 전달된 설정을 기반으로 객체를 생성한다.
 //이후 app을 통해서 firebase의 인증, 데이터베이스, 스토리지등의 서비스를 이용할 것이다.
@@ -123,13 +124,16 @@ export const createChannel = async ({ title, description }) => {
 };
 
 
-export const createMessage  = async ({channelId,text}) => {
+export const createMessage  = async ({channelId,message}) => {
     //특정 채널의 메시지 컬렉션 안에 새로운 메시지 문서의 레퍼런스를 생성
 
-    const docRef = doc(db, `channels/${channelId}/message`,text)
+    const docRef = doc(db, `channels/${channelId}/messages`, message._id)
 
     //생성된 문서 레퍼런스에 메세지 데이터를 저장
     //기존 메세지 객체의 모든 속성을 복사하고
     //cratedAt필드를 현재 시간으로 추가
-    await setDoc(docRef,{...text, createdAt: Date.now() })
+    await setDoc(docRef,
+        {...message, createdAt: Date.now() }
+    )
+    console.log(`Message created with ID : ${docRef.id}`);
 }
